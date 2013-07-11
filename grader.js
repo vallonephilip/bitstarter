@@ -32,7 +32,7 @@ var rest = require('restler');
 // initialize doMeAfterAsync as a function
 // still learning about node's asynchronous callbacks, this may or may not be an incredibly lame
 // way of doing things
-var doMeAfterAsync = function() {
+var gradingRoutine = function() {
 
 	var assertFileExists = function(infile) {
 	    var instr = infile.toString();
@@ -83,7 +83,7 @@ var doMeAfterAsync = function() {
 	}
 }
 
-// commander stuff
+// commander prompt declarations
 program
 	.option('-f, --file [type]', 'Specify file')
 	.option('-w, --url [type]', 'Specify url')
@@ -98,15 +98,16 @@ CHECKSFILE_DEFAULT = program.checks;
 if(program.web) {
 	console.log("called web " + program.web); 
 	rest.get(program.web).on('complete', function(data) {
+		// write website's html to a file for processing
 		fs.writeFileSync("restlerFun.html", data);
-		doMeAfterAsync();
+		gradingRoutine();
 	});
 
 // if the file tag is specified
 } else if(program.file) {
 	console.log("called file " + program.file);
 	HTML_FILE_DEFAULT = program.file + "";
-	doMeAfterAsync();
+	gradingRoutine();
 } else {
 	console.log("No flag specified, now terminating");
 }
